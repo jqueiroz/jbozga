@@ -17,3 +17,8 @@ You may want to use your custom xmobar config instead of `xmobar-config.default.
 
 ## Running with nix
 Comming soon™
+
+## FAQ
+### Why is the font so small/large?
+The font size is hardcoded in the default xmonad config. Try changing the "14" on the second line:
+`{ font = "xft:Bitstream Vera Sans Mono:size=14:bold:antialias=true"`.
