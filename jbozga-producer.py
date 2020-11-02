@@ -125,7 +125,7 @@ class Runner:
 def main():
     # Read command line arguments
     if len(sys.argv) not in [2, 3]:
-        print("Error: incorrect number of arguments")
+        sys.stderr.write("Error: incorrect number of arguments\n")
         sys.exit(1)
 
     jbovlaste_dump_filename = sys.argv[1]
