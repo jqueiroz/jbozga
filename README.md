@@ -14,6 +14,7 @@ You may run this project manually with the following steps:
 4. Start xmobar: `xmobar /path/to/xmobar-config.default.hs`
 
 You may want to use your custom xmobar config instead of `xmobar-config.default.hs`.
+For more information, please refer to the [xmobar documentation](https://xmobar.org/).
 
 ## Running with nix
 Comming soon™
