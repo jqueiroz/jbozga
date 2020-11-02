@@ -148,9 +148,9 @@ def main():
         try:
             epoch = epoch + 1
             if epoch != 1:
-                logger.debug("Waiting before initiating a new epoch...")
+                logger.info("Waiting before initiating a new epoch...")
                 time.sleep(10)
-            logger.debug("Initiating epoch #%d" % epoch)
+            logger.info("Initiating epoch #%d" % epoch)
             logger.info("Creating named pipe: '%s'" % pipe_filename)
             if not os.path.exists(pipe_filename):
                 os.mkfifo(pipe_filename)
