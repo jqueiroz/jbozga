@@ -148,6 +148,7 @@ def main():
     # Run
     runner = Runner(dictionary)
     epoch = 0
+    success = True
     while True:
         try:
             epoch = epoch + 1
@@ -155,8 +156,12 @@ def main():
                 logger.info("Waiting before initiating a new epoch...")
                 time.sleep(10)
             logger.info("Initiating epoch #%d" % epoch)
-            logger.info("Creating named pipe: '%s'" % pipe_filename)
+            if os.path.isfile(pipe_filename):
+                logger.error("The file '%s' already exists, but does not seem to be a pipe. Refusing to run." % pipe_filename)
+                success = False
+                break
             if not os.path.exists(pipe_filename):
+                logger.info("Creating named pipe: '%s'" % pipe_filename)
                 os.mkfifo(pipe_filename)
             logger.info("Opening named pipe: '%s'" % pipe_filename)
             with open(pipe_filename, "w") as pipe:
@@ -170,6 +175,8 @@ def main():
             logger.warning("The pipe broke. Retrying soon in a new, and hopefully more prosperous, epoch...")
         except:
             logger.error("Unexpected exception in the main loop.\n%s" % traceback.format_exc())
+    if not success:
+        sys.exit(2)
 
 if __name__ == "__main__":
     main()
