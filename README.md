@@ -22,3 +22,6 @@ Comming soon™
 ### Why is the font so small/large?
 The font size is hardcoded in the default xmonad config. Try changing the "14" on the second line:
 `{ font = "xft:Bitstream Vera Sans Mono:size=14:bold:antialias=true"`.
+
+<!-- TODO: add screenshot -->
+<!-- TODO: switch to a more recent jbovlaste dump -->
