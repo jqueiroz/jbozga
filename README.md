@@ -1,6 +1,6 @@
 # jbozga
 
-A simple statusbar constantly displaying the Lojban definition for the currently selected word (X11 only).
+A simple status bar constantly displaying the Lojban definition for the currently selected word (X11 only).
 
 It works as follows:
 1. The python script **jbozga-producer.py** constantly inspects the current X11 selection (using xclip), looks up the selection in the in-memory dictionary (built from a [jbovlaste](https://jbovlaste.lojban.org/) dump), and whenever an entry is found writes the definition to a named pipe (defaults to "$HOME/.jbozga_pipe").
