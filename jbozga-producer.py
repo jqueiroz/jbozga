@@ -111,7 +111,7 @@ class Runner:
             # Return the cached response, if it is still valid
             if clipboard == self.previous_clipboard:
                 return self.previous_response
-            # Fetch the new the response
+            # Fetch the new response
             response = self.retrieve_response(clipboard)
             if response is not None:
                 self.previous_clipboard = clipboard
