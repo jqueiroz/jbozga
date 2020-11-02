@@ -126,7 +126,7 @@ def main():
     # Read command line arguments
     if len(sys.argv) not in [2, 3]:
         print("Error: incorrect number of arguments")
-        return 1
+        sys.exit(1)
 
     jbovlaste_dump_filename = sys.argv[1]
     if len(sys.argv) >= 3:
