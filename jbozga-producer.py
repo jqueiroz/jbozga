@@ -33,7 +33,7 @@ class Dictionary:
             if notes is not None:
                 entry['notes'] = notes.text
             for glossword in valsi.findall('glossword'):
-                if 'glossword' not in entry:
+                if 'glosswords' not in entry:
                     entry['glosswords'] = []
                 entry['glosswords'].append(glossword.attrib['word'])
                 if glossword.attrib['word'] not in self.index_glossword:
