@@ -36,9 +36,10 @@ class Dictionary:
                 if 'glosswords' not in entry:
                     entry['glosswords'] = []
                 entry['glosswords'].append(glossword.attrib['word'])
-                if glossword.attrib['word'] not in self.index_glossword:
-                    self.index_glossword[glossword.attrib['word'].lower()] = []
-                self.index_glossword[glossword.attrib['word'].lower()].append({'entry': entry, 'sense': glossword.attrib.get('sense', None)})
+                normalized_glossword_key = self.normalize_entry_key(glossword.attrib['word'])
+                if normalized_glossword_key not in self.index_glossword:
+                    self.index_glossword[normalized_glossword_key] = []
+                self.index_glossword[normalized_glossword_key].append({'entry': entry, 'sense': glossword.attrib.get('sense', None)})
             for rafsi in valsi.findall('rafsi'):
                 rafsi_text = rafsi.text.replace('&apos;', '\'')
                 entry['rafsi'] = entry.get('rafsi', [])
@@ -46,6 +47,8 @@ class Dictionary:
                 self.index_rafsi[rafsi_text] = entry['word']
             self.entries[self.normalize_entry_key(entry['word'])] = entry
     def normalize_entry_key(self, entry_key):
+        if entry_key is None:
+            return None
         return entry_key.lower().lstrip(".").replace("’", "'")
     def normalize_definition(self, definition):
         new_definition = []
@@ -68,7 +71,8 @@ class Dictionary:
         else:
             return None
     def lookup_all_by_glossword(self, word):
-        return self.index_glossword.get(word.lower(), [])
+        normalized_word = self.normalize_entry_key(word)
+        return self.index_glossword.get(normalized_word, [])
     def lookup_best_by_glossword(self, word):
         results = self.lookup_all_by_glossword(word)
         for result in results:
