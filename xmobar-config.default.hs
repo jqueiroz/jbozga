@@ -8,7 +8,7 @@ Config
     , allDesktops = True
     , lowerOnStart = False
     , overrideRedirect = True
-    , commands = [Run PipeReader "/home/john/.jbozga_pipe" "jbozga"]
+    , commands = [Run PipeReader "$HOME/.jbozga_pipe" "jbozga"]
     , sepChar = "%"
     , alignSep = "}{"
     , template = "%jbozga%"
