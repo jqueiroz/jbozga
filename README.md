@@ -9,7 +9,7 @@ It works as follows:
 ## Running manually
 You may run this project manually with the following steps:
 1. Install xclip and xmobar. Both are readily available on the built-in package manager from most Linux distributions.
-2. Download a jbovlaste dump. For example: `curl "https://raw.githubusercontent.com/jqueiroz/jbovlaste-dumps/master/english/2019-07-06.xml" -o /path/to/jbovlaste.xml`
+2. Download a jbovlaste dump. For example: `curl "https://raw.githubusercontent.com/jqueiroz/jbovlaste-dumps/master/english/2020-11-02.xml" -o /path/to/jbovlaste.xml`
 3. Run the producer script: `./jbozga-producer.py /path/to/jbovlaste.xml`
 4. Start xmobar: `xmobar /path/to/xmobar-config.default.hs`
 
@@ -25,4 +25,3 @@ The font size is hardcoded in the default xmonad config. Try changing the "14" o
 `{ font = "xft:Bitstream Vera Sans Mono:size=14:bold:antialias=true"`.
 
 <!-- TODO: add screenshot -->
-<!-- TODO: switch to a more recent jbovlaste dump -->
