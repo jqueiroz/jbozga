@@ -90,6 +90,7 @@ class Runner:
         self.previous_response = ""
 
     def retrieve_response(self, clipboard):
+        # TODO: upon finding both a cmavo and a rafsi, display both
         entry = self.dictionary.lookup(clipboard)
         if entry is None:
             entry = self.dictionary.lookup_best_by_glossword(clipboard)
