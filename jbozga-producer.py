@@ -89,17 +89,31 @@ class Runner:
         self.previous_clipboard = ""
         self.previous_response = ""
 
-    def retrieve_response(self, clipboard):
-        # TODO: upon finding both a cmavo and a rafsi, display both
-        entry = self.dictionary.lookup(clipboard)
-        if entry is None:
-            entry = self.dictionary.lookup_best_by_glossword(clipboard)
-        if entry is None:
-            entry = self.dictionary.lookup_by_rafsi(clipboard)
-        if entry is None:
-            return None
+    def build_response(self, entry):
         definition = entry['definition'].replace("₁", "1").replace("₂", "2").replace("₃", "3").replace("₄", "4").replace("₅", "5")
         return "<fc=#00ffff>%s:</fc> %s" % (entry['word'], definition)
+
+    def retrieve_response(self, clipboard):
+        selected_entries = []
+        def append_entry(entry):
+            if entry is not None:
+                selected_entries.append(self.build_response(entry))
+
+        # Look up word
+        append_entry(self.dictionary.lookup(clipboard))
+
+        # Look up by rafsi
+        append_entry(self.dictionary.lookup_by_rafsi(clipboard))
+
+        # Look up by glossord, as a fallback
+        if not selected_entries:
+            append_entry(self.dictionary.lookup_best_by_glossword(clipboard))
+
+        # Prepare the final response
+        if selected_entries:
+            return "     ".join(selected_entries)
+        else:
+            return None
 
     def process_next_message(self):
         try:
