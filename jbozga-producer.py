@@ -14,6 +14,20 @@ logging.basicConfig(format='[%(asctime)s] [%(levelname)s] %(message)s')
 logger = logging.getLogger("jbozga")
 logger.setLevel(logging.INFO)
 
+class LujvoDecomposer:
+    def __init__(self):
+        try:
+            import camxes
+            self.camxes = camxes
+            logger.info("Found camxes. Lujvo decomposition is enabled.")
+        except ImportError:
+            logger.warning("Did not find camxes. Lujvo decomposition is disabled.")
+            pass
+    def decompose(self, word):
+        if self.camxes is None:
+            return None
+        return self.camxes.decompose(word)
+
 class Dictionary:
     def __init__(self, jbovlaste_dump_filename):
         self.entries = {}
@@ -172,6 +186,7 @@ def main():
     logger.debug("Finished initializing the dictionary!")
 
     # Run
+    lujvo_decomposer = LujvoDecomposer()
     runner = Runner(dictionary)
     epoch = 0
     success = True
