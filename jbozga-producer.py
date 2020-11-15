@@ -100,12 +100,19 @@ class Runner:
         def append_entry(entry):
             if entry is not None:
                 selected_entries.append(self.build_response(entry))
+                return True
+            return False
 
         # Look up word
         append_entry(self.dictionary.lookup(clipboard))
 
         # Look up by rafsi
         append_entry(self.dictionary.lookup_by_rafsi(clipboard))
+
+        # Look up uivla, as a fallback
+        if not selected_entries and clipboard.lstrip(".aeiouy'") == "nmo":
+            if append_entry(self.dictionary.lookup(clipboard[:-3])):
+                append_entry(self.dictionary.lookup("cinmo"))
 
         # Look up by glossord, as a fallback
         if not selected_entries:
