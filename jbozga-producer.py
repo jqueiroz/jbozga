@@ -7,7 +7,7 @@ import logging
 import traceback
 import xml.etree.ElementTree as ET
 
-# TODO: "toljinga" does not work
+# TODO: implement lujvo decomposition
 
 logging.basicConfig(format='[%(asctime)s] [%(levelname)s] %(message)s')
 logger = logging.getLogger("jbozga")
