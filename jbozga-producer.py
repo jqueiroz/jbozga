@@ -171,7 +171,7 @@ class Runner:
         self.previous_response = ""
 
     def normalize_clipboard(self, clipboard):
-        clipboard = clipboard.strip(" :\t")
+        clipboard = clipboard.split("\n")[0].strip(" :\t")
         clipboard_words = clipboard.split(" ")
         # If all words have a single character, that probably means some funny jbopre is talking with spaces between each letter
         if len(clipboard_words) >= 5 and all(len(word) == 1 for word in clipboard_words):
