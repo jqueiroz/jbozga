@@ -191,7 +191,7 @@ class Runner:
             logger.error("Failed to process message.\n%s" % traceback.format_exc())
             return "<fc=#ff0000>error</fc>"
 
-# TODO: consider automatically downloading the jbovlaste dump, and saving it to $HOME/.jbozga_jbovlaste_dump.xml
+# TODO: consider automatically downloading the jbovlaste dump, and saving it to $HOME/.jbozga_jbovlaste_dump.xml (only if the --download flag is passed)
 def main():
     # Read command line arguments
     if len(sys.argv) not in [2, 3]:
