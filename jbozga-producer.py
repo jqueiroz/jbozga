@@ -15,6 +15,37 @@ logging.basicConfig(format='[%(asctime)s] [%(levelname)s] %(message)s')
 logger = logging.getLogger("jbozga")
 logger.setLevel(logging.INFO)
 
+class LujvoDecomposer:
+    def __init__(self):
+        self.has_veljvo = False
+        try:
+            output = subprocess.run(['veljvo'], input="", timeout=1, capture_output=True).stdout.decode('utf-8').strip()
+            logger.info("Successfully located veljvo. Lujvo decomposition is enabled.")
+            self.has_veljvo = True
+        except FileNotFoundError:
+            logger.info("Could not locate veljvo. Lujvo decomposition is disabled.")
+        except:
+            logger.warning("Initial process call to veljvo failed. Lujvo decomposition is disabled.\n%s" % traceback.format_exc())
+
+    def decompose(self, input):
+        if not self.has_veljvo:
+            return None
+        try:
+            output = subprocess.run(['veljvo'], input=input.encode('utf-8'), timeout=1, capture_output=True).stdout.decode('utf-8').strip()
+            if "got error" in output:
+                return None
+            else:
+                try:
+                    return output.split("→")[1].strip().lstrip("[").rstrip("]").split(" ")
+                except IndexError:
+                    return None
+        except subprocess.TimeoutExpired:
+            logger.warning("Process call to veljvo timed out. Skipping this run of lujvo decomposition...")
+            return None
+        except:
+            logger.error("Process call to veljvo failed. Skipping this run of lujvo decomposition...\n%s" % traceback.format_exc())
+            return None
+
 class Dictionary:
     def __init__(self, jbovlaste_dump_filename):
         self.entries = {}
@@ -88,8 +119,9 @@ class Dictionary:
             return None
 
 class Runner:
-    def __init__(self, dictionary):
+    def __init__(self, dictionary, lujvo_decomposer):
         self.dictionary = dictionary
+        self.lujvo_decomposer = lujvo_decomposer
         self.previous_clipboard = ""
         self.previous_response = ""
 
@@ -119,6 +151,13 @@ class Runner:
         # Look up by glossord, as a fallback
         if not selected_entries:
             append_entry(self.dictionary.lookup_best_by_glossword(clipboard))
+
+        # As a last resort, perform lujvo decomposition
+        if not selected_entries:
+            lujvo_pieces = self.lujvo_decomposer.decompose(clipboard)
+            if lujvo_pieces is not None:
+                for piece in lujvo_pieces:
+                    append_entry(self.dictionary.lookup(piece))
 
         # Prepare the final response
         if selected_entries:
@@ -173,7 +212,8 @@ def main():
     logger.debug("Finished initializing the dictionary!")
 
     # Run
-    runner = Runner(dictionary)
+    lujvo_decomposer = LujvoDecomposer()
+    runner = Runner(dictionary, lujvo_decomposer)
     epoch = 0
     success = True
     while True:
