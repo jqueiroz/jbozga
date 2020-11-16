@@ -16,6 +16,45 @@ logging.basicConfig(format='[%(asctime)s] [%(levelname)s] %(message)s')
 logger = logging.getLogger("jbozga")
 logger.setLevel(logging.INFO)
 
+class LujvoMaker:
+    def __init__(self):
+        self.has_jvozba = False
+        try:
+            output = subprocess.run(['jvozba'], input="", timeout=1, capture_output=True).stdout.decode('utf-8').strip()
+            logger.info("Successfully located jvozba. Lujvo making is enabled.")
+            self.has_jvozba = True
+        except FileNotFoundError:
+            logger.info("Could not locate jvozba. Lujvo making is disabled.")
+        except:
+            logger.warning("Initial process call to jvozba failed. Lujvo making is disabled.\n%s" % traceback.format_exc())
+
+    def make(self, input):
+        if not self.has_jvozba:
+            return None
+        if " " not in input:
+            return None
+        if len(input) >= 200:
+            return None
+        try:
+            output = subprocess.run(['jvozba'], input=input.encode('utf-8'), timeout=1, capture_output=True).stdout.decode('utf-8').strip()
+            if "got error" in output:
+                return None
+            else:
+                try:
+                    raw_output = output.split("→")[1].split("(")[0].strip()
+                    if raw_output.strip("-y") == "":
+                        return None
+                    else:
+                        return raw_output
+                except IndexError:
+                    return None
+        except subprocess.TimeoutExpired:
+            logger.warning("Process call to jvozba timed out. Skipping this run of lujvo making...")
+            return None
+        except:
+            logger.error("Process call to jvozba failed. Skipping this run of lujvo making...\n%s" % traceback.format_exc())
+            return None
+
 class LujvoDecomposer:
     def __init__(self):
         self.has_veljvo = False
@@ -120,21 +159,30 @@ class Dictionary:
             return None
 
 class Runner:
-    def __init__(self, dictionary, lujvo_decomposer):
+    def __init__(self, dictionary, lujvo_decomposer, lujvo_maker):
         self.dictionary = dictionary
         self.lujvo_decomposer = lujvo_decomposer
+        self.lujvo_maker = lujvo_maker
         self.previous_clipboard = ""
         self.previous_response = ""
 
-    def build_response(self, entry):
+    def build_response_for_isolated_word(self, word):
+        return "<fc=#ffddaa>%s</fc>" % word
+
+    def build_response_for_entry(self, entry):
         definition = entry['definition'].replace("₁", "1").replace("₂", "2").replace("₃", "3").replace("₄", "4").replace("₅", "5")
         return "<fc=#00ffff>%s:</fc> %s" % (entry['word'], definition)
 
     def retrieve_response(self, clipboard):
         selected_entries = []
+        def append_isolated_word(word):
+            if word is not None:
+                selected_entries.append(self.build_response_for_isolated_word(word))
+                return True
+            return False
         def append_entry(entry):
             if entry is not None:
-                selected_entries.append(self.build_response(entry))
+                selected_entries.append(self.build_response_for_entry(entry))
                 return True
             return False
 
@@ -158,7 +206,21 @@ class Runner:
             lujvo_pieces = self.lujvo_decomposer.decompose(clipboard)
             if lujvo_pieces is not None:
                 for piece in lujvo_pieces:
-                    append_entry(self.dictionary.lookup(piece))
+                    entry = self.dictionary.lookup(piece)
+                    if entry:
+                        append_entry(entry)
+                    else:
+                        append_isolated_word(piece)
+
+        # As a last resort, perform lujvo making
+        if not selected_entries:
+            lujvo = self.lujvo_maker.make(clipboard)
+            if lujvo is not None:
+                entry = self.dictionary.lookup(lujvo)
+                if entry:
+                    append_entry(entry)
+                else:
+                    append_isolated_word(lujvo)
 
         # Prepare the final response
         if selected_entries:
@@ -214,7 +276,8 @@ def main():
 
     # Run
     lujvo_decomposer = LujvoDecomposer()
-    runner = Runner(dictionary, lujvo_decomposer)
+    lujvo_maker = LujvoMaker()
+    runner = Runner(dictionary, lujvo_decomposer, lujvo_maker)
     epoch = 0
     success = True
     while True:
