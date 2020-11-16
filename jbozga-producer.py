@@ -70,6 +70,8 @@ class LujvoDecomposer:
     def decompose(self, input):
         if not self.has_veljvo:
             return None
+        if len(input) >= 200:
+            return None
         try:
             output = subprocess.run(['veljvo'], input=input.encode('utf-8'), timeout=1, capture_output=True).stdout.decode('utf-8').strip()
             if "got error" in output:
