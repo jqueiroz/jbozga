@@ -6,7 +6,9 @@ It works as follows:
 1. The python script **jbozga-producer.py** constantly inspects the current X11 selection (using xclip), looks up the selection in the in-memory dictionary (built from a [jbovlaste](https://jbovlaste.lojban.org/) dump), and whenever an entry is found writes the definition to a named pipe (defaults to "$HOME/.jbozga_pipe").
 2. An instance of [xmobar](https://github.com/jaor/xmobar) runs taking input from the named pipe.
 
-![](screenshot2.jpg)
+![](screenshot1.jpg)
+
+![](screenshot3.jpg)
 
 ## Running manually
 You may run this project manually with the following steps:
