@@ -209,6 +209,13 @@ class Runner:
             if lujvo_pieces is not None:
                 for piece in lujvo_pieces:
                     entry = self.dictionary.lookup(piece)
+                    if entry is None and len(piece) == 5 and piece[-1] == "-":
+                        piece_prefix = piece[:-1]
+                        for vowel in "aeiou":
+                            reconstructed_piece = piece_prefix + vowel
+                            entry = self.dictionary.lookup(reconstructed_piece)
+                            if entry is not None:
+                                break
                     if entry:
                         append_entry(entry)
                     else:
