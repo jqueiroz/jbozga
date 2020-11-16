@@ -176,6 +176,7 @@ class Runner:
         return "<fc=#00ffff>%s:</fc> %s" % (entry['word'], definition)
 
     def retrieve_response(self, clipboard):
+        clipboard = clipboard.strip(" :\t")
         selected_entries = []
         def append_isolated_word(word):
             if word is not None:
