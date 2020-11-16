@@ -199,6 +199,10 @@ class Runner:
                 return True
             return False
 
+        # Handle special cases
+        if clipboard == " ":
+            return None
+
         # Look up word
         append_entry(self.dictionary.lookup(clipboard))
 
