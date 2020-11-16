@@ -5,7 +5,7 @@ Doubles as a lujvo-maker, as long as [jvozba](https://github.com/uakci/jvozba) i
 
 It works as follows:
 1. The python script **jbozga-producer.py** constantly inspects the current X11 selection (using xclip), looks up the selection in the in-memory dictionary (built from a [jbovlaste](https://jbovlaste.lojban.org/) dump), and whenever an entry is found writes the definition to a named pipe (defaults to "$HOME/.jbozga_pipe").
-    1. When the clipboard contains multiple words, the producer script attempts to build a lujvo by calling **jbozga** (it must be on the PATH).
+    1. When the clipboard contains multiple words, the producer script attempts to build a lujvo by calling *jvozba* (it must be on the PATH).
 2. An instance of [xmobar](https://github.com/jaor/xmobar) runs taking input from the named pipe.
 
 ![](screenshot1.jpg)
