@@ -170,6 +170,14 @@ class Runner:
         self.previous_clipboard = ""
         self.previous_response = ""
 
+    def normalize_clipboard(self, clipboard):
+        clipboard = clipboard.strip(" :\t")
+        clipboard_words = clipboard.split(" ")
+        # If all words have a single character, that probably means some funny jbopre is talking with spaces between each letter
+        if len(clipboard_words) >= 5 and all(len(word) == 1 for word in clipboard_words):
+            clipboard = "".join(clipboard_words)
+        return clipboard
+
     def build_response_for_isolated_word(self, word):
         return "<fc=#ffddaa>%s</fc>" % word
 
@@ -178,7 +186,7 @@ class Runner:
         return "<fc=#00ffff>%s:</fc> %s" % (entry['word'], definition)
 
     def retrieve_response(self, clipboard):
-        clipboard = clipboard.strip(" :\t")
+        clipboard = self.normalize_clipboard(clipboard)
         selected_entries = []
         def append_isolated_word(word):
             if word is not None:
