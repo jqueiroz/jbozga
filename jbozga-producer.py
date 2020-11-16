@@ -7,7 +7,6 @@ import logging
 import traceback
 import xml.etree.ElementTree as ET
 
-# TODO: implement lujvo decomposition
 # TODO: properly parse command line arguments, and implement at least "--help"
 # TODO: incorporate uakci's rafsi list
 
