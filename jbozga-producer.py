@@ -9,6 +9,7 @@ import xml.etree.ElementTree as ET
 
 # TODO: consider implementing lujvo-making, when multiple consecutive Lojban words are selected
 # TODO: properly parse command line arguments, and implement at least "--help"
+# TODO: consider imposing a character limit for lujvo pieces
 # TODO: incorporate uakci's rafsi list
 
 logging.basicConfig(format='[%(asctime)s] [%(levelname)s] %(message)s')
