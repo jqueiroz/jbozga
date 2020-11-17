@@ -69,8 +69,6 @@ class LujvoDecomposer:
     def decompose(self, input):
         if not self.has_veljvo:
             return None
-        if " " not in input:
-            return None
         if len(input) >= 200:
             return None
         try:
