@@ -88,6 +88,7 @@ class LujvoDecomposer:
             return None
 
 class Dictionary:
+    #TODO: replace h with ' for certain methods
     def __init__(self, jbovlaste_dump_filename):
         self.entries = {}
         self.index_rafsi = {}
